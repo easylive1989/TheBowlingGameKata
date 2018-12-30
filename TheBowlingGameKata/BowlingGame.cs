@@ -11,13 +11,11 @@ namespace TheBowlingGameKata
 
         public void Roll(int pins)
         {
-            var last2Frame = _frames.Count > 1 ? _frames.Skip(_frames.Count - 2).FirstOrDefault() : null;
-            var lastFrame = _frames.LastOrDefault();
+            var last2Frame = GetLast2Frame();
+            var lastFrame = GetLastFrame();
             if (Frame.IsFinish(lastFrame))
             {
-                var frame = new Frame();
-                frame.SetFirstRoll(pins);
-                _frames.Add(frame);
+                var frame = CreateFrame(pins);
 
                 if (Frame.IsSpare(lastFrame))
                 {
@@ -37,7 +35,25 @@ namespace TheBowlingGameKata
                 }
             }
         }
-        
+
+        private Frame CreateFrame(int pins)
+        {
+            var frame = new Frame();
+            frame.SetFirstRoll(pins);
+            _frames.Add(frame);
+            return frame;
+        }
+
+        private Frame GetLast2Frame()
+        {
+            return _frames.Count > 1 ? _frames.Skip(_frames.Count - 2).FirstOrDefault() : null;
+        }
+
+        private Frame GetLastFrame()
+        {
+            return _frames.LastOrDefault();
+        }
+
         public int GetScore()
         {
             return _frames.Take(10).Sum(x=>x.Score);
