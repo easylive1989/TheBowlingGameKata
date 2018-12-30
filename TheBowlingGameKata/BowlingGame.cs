@@ -16,21 +16,23 @@ namespace TheBowlingGameKata
             var currentFrame = _frames.Find(x => !x.IsFinish());
             if (currentFrame != null)
             {
-                currentFrame.SecondPins = pins;
-                if (lastFrame != null && !IsExtraFrame(lastFrame) && lastFrame.IsStrike())
+                currentFrame.SecondRoll = pins;
+                if (lastFrame != null && !IsExtraFrame(last2Frame) && lastFrame.IsStrike())
                 {
                     _score += pins;
                 }
             }
             else
             {
-                currentFrame = new Frame();
-                currentFrame.FirstPins = pins;
+                currentFrame = new Frame
+                {
+                    FirstRoll = pins
+                };
                 _frames.Add(currentFrame);
 
                 if (lastFrame != null && !IsExtraFrame(lastFrame) && lastFrame.IsSpare())
                 {
-                    _score += currentFrame.FirstPins;
+                    _score += currentFrame.FirstRoll;
                 }
                 if (last2Frame != null && !IsExtraFrame(last2Frame) && lastFrame.IsStrike() && last2Frame.IsStrike())
                 {

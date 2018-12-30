@@ -4,32 +4,32 @@ namespace TheBowlingGameKata
 {
     public class Frame
     {
-        public int FirstPins = -1;
-        public int SecondPins = -1;
+        public int FirstRoll = -1;
+        public int SecondRoll = -1;
 
         public bool IsSpare()
         {
-            return FirstPins + GetSecondScore() == 10;
+            return FirstRoll + GetSecondScore() == 10;
         }
 
         private int GetSecondScore()
         {
-            return SecondPins == -1 ? 0 : SecondPins;
+            return SecondRoll == -1 ? 0 : SecondRoll;
         }
 
         internal bool IsStrike()
         {
-            return FirstPins == 10;
+            return FirstRoll == 10;
         }
 
         public bool HasSecondPin()
         {
-            return !IsStrike() && FirstPins != -1 && SecondPins == -1;
+            return !IsStrike() && FirstRoll != -1 && SecondRoll == -1;
         }
 
         public bool IsFinish()
         {
-            return IsStrike() || (FirstPins != -1 && SecondPins != -1);
+            return IsStrike() || (FirstRoll != -1 && SecondRoll != -1);
         }
     }
 }
