@@ -17,7 +17,7 @@ namespace TheBowlingGameKata
             if (currentFrame != null)
             {
                 currentFrame.SetSecondRoll(pins);
-                if (lastFrame != null && !IsExtraFrame(last2Frame) && lastFrame.IsStrike())
+                if (lastFrame != null && !IsExtraFrame(lastFrame) && lastFrame.IsStrike())
                 {
                     lastFrame.Score += currentFrame.SecondRoll;
                 }
