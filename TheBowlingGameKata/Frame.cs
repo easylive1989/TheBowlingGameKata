@@ -4,8 +4,9 @@ namespace TheBowlingGameKata
 {
     public class Frame
     {
-        public int FirstRoll = -1;
-        public int SecondRoll = -1;
+        public int FirstRoll { get; private set; } = -1;
+        public int SecondRoll { get; private set; } = -1;
+        public int Score;
 
         public bool IsSpare()
         {
@@ -17,7 +18,7 @@ namespace TheBowlingGameKata
             return SecondRoll == -1 ? 0 : SecondRoll;
         }
 
-        internal bool IsStrike()
+        public bool IsStrike()
         {
             return FirstRoll == 10;
         }
@@ -31,5 +32,18 @@ namespace TheBowlingGameKata
         {
             return IsStrike() || (FirstRoll != -1 && SecondRoll != -1);
         }
+
+        public void SetFirstRoll(int pins)
+        {
+            FirstRoll = pins;
+            Score += pins;
+        }
+
+        public void SetSecondRoll(int pins)
+        {
+            SecondRoll = pins;
+            Score += pins;
+        }
+        
     }
 }

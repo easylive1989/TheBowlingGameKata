@@ -16,33 +16,26 @@ namespace TheBowlingGameKata
             var currentFrame = _frames.Find(x => !x.IsFinish());
             if (currentFrame != null)
             {
-                currentFrame.SecondRoll = pins;
+                currentFrame.SetSecondRoll(pins);
                 if (lastFrame != null && !IsExtraFrame(last2Frame) && lastFrame.IsStrike())
                 {
-                    _score += pins;
+                    lastFrame.Score += currentFrame.SecondRoll;
                 }
             }
             else
             {
-                currentFrame = new Frame
-                {
-                    FirstRoll = pins
-                };
+                currentFrame = new Frame();
+                currentFrame.SetFirstRoll(pins);
                 _frames.Add(currentFrame);
 
                 if (lastFrame != null && !IsExtraFrame(lastFrame) && lastFrame.IsSpare())
                 {
-                    _score += currentFrame.FirstRoll;
+                    lastFrame.Score += currentFrame.FirstRoll;
                 }
                 if (last2Frame != null && !IsExtraFrame(last2Frame) && lastFrame.IsStrike() && last2Frame.IsStrike())
                 {
-                    _score += pins;
+                    last2Frame.Score += currentFrame.FirstRoll;
                 }
-            }
-
-            if (_frames.Count <= 10)
-            {
-                _score += pins;
             }
         }
 
@@ -53,7 +46,7 @@ namespace TheBowlingGameKata
 
         public int GetScore()
         {
-            return _score;
+            return _frames.Take(10).Sum(x=>x.Score);
         }
     }
 }
