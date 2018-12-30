@@ -54,5 +54,10 @@ namespace TheBowlingGameKata
         {
             return frame != null && frame.IsStrike();
         }
+
+        public static bool IsFinish(Frame frame)
+        {
+            return frame == null || frame.IsFinish();
+        }
     }
 }

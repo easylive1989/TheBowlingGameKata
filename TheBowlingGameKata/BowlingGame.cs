@@ -6,35 +6,34 @@ namespace TheBowlingGameKata
 {
     public class BowlingGame
     {
-        private int _score;
+        private readonly int _score;
         private List<Frame> _frames = new List<Frame>();
 
         public void Roll(int pins)
         {
-            var last2Frame = _frames.Where(x => x.IsFinish()).Reverse().Skip(1).FirstOrDefault();
-            var lastFrame = _frames.LastOrDefault(x => x.IsFinish());
-            var currentFrame = _frames.Find(x => !x.IsFinish());
-            if (currentFrame != null)
+            var last2Frame = _frames.Count > 1 ? _frames.Skip(_frames.Count - 2).FirstOrDefault() : null;
+            var lastFrame = _frames.LastOrDefault();
+            if (Frame.IsFinish(lastFrame))
             {
-                currentFrame.SetSecondRoll(pins);
-                if (Frame.IsStrike(lastFrame))
+                var frame = new Frame();
+                frame.SetFirstRoll(pins);
+                _frames.Add(frame);
+
+                if (Frame.IsSpare(lastFrame))
                 {
-                    lastFrame.Score += currentFrame.SecondRoll;
+                    lastFrame.Score += frame.FirstRoll;
+                }
+                if (Frame.IsStrike(last2Frame) && Frame.IsStrike(lastFrame))
+                {
+                    last2Frame.Score += frame.FirstRoll;
                 }
             }
             else
             {
-                currentFrame = new Frame();
-                currentFrame.SetFirstRoll(pins);
-                _frames.Add(currentFrame);
-
-                if (Frame.IsSpare(lastFrame))
+                lastFrame.SetSecondRoll(pins);
+                if (Frame.IsStrike(last2Frame))
                 {
-                    lastFrame.Score += currentFrame.FirstRoll;
-                }
-                if (Frame.IsStrike(last2Frame) && Frame.IsStrike(lastFrame))
-                {
-                    last2Frame.Score += currentFrame.FirstRoll;
+                    last2Frame.Score += lastFrame.SecondRoll;
                 }
             }
         }
