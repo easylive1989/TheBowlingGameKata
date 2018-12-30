@@ -44,6 +44,15 @@ namespace TheBowlingGameKata
             SecondRoll = pins;
             Score += pins;
         }
-        
+
+        public static bool IsSpare(Frame frame)
+        {
+            return frame != null && frame.IsSpare();
+        }
+
+        public static bool IsStrike(Frame frame)
+        {
+            return frame != null && frame.IsStrike();
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace TheBowlingGameKata
             if (currentFrame != null)
             {
                 currentFrame.SetSecondRoll(pins);
-                if (lastFrame != null && lastFrame.IsStrike())
+                if (Frame.IsStrike(lastFrame))
                 {
                     lastFrame.Score += currentFrame.SecondRoll;
                 }
@@ -28,11 +28,11 @@ namespace TheBowlingGameKata
                 currentFrame.SetFirstRoll(pins);
                 _frames.Add(currentFrame);
 
-                if (lastFrame != null && lastFrame.IsSpare())
+                if (Frame.IsSpare(lastFrame))
                 {
                     lastFrame.Score += currentFrame.FirstRoll;
                 }
-                if (last2Frame != null && lastFrame.IsStrike() && last2Frame.IsStrike())
+                if (Frame.IsStrike(last2Frame) && Frame.IsStrike(lastFrame))
                 {
                     last2Frame.Score += currentFrame.FirstRoll;
                 }
