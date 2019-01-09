@@ -1,62 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace TheBowlingGameKata
+﻿namespace TheBowlingGameKata
 {
     public class BowlingGame
     {
-        private readonly int _score;
-        private List<Frame> _frames = new List<Frame>();
+        private int _currentRoll;
+        private int[] _rolls = new int[21];
 
         public void Roll(int pins)
         {
-            var last2Frame = GetLast2Frame();
-            var lastFrame = GetLastFrame();
-            if (Frame.IsFinish(lastFrame))
-            {
-                var frame = CreateFrame(pins);
-
-                if (Frame.IsSpare(lastFrame))
-                {
-                    lastFrame.Score += frame.FirstRoll;
-                }
-                if (Frame.IsStrike(last2Frame) && Frame.IsStrike(lastFrame))
-                {
-                    last2Frame.Score += frame.FirstRoll;
-                }
-            }
-            else
-            {
-                lastFrame.SetSecondRoll(pins);
-                if (Frame.IsStrike(last2Frame))
-                {
-                    last2Frame.Score += lastFrame.SecondRoll;
-                }
-            }
-        }
-
-        private Frame CreateFrame(int pins)
-        {
-            var frame = new Frame();
-            frame.SetFirstRoll(pins);
-            _frames.Add(frame);
-            return frame;
-        }
-
-        private Frame GetLast2Frame()
-        {
-            return _frames.Count > 1 ? _frames.Skip(_frames.Count - 2).FirstOrDefault() : null;
-        }
-
-        private Frame GetLastFrame()
-        {
-            return _frames.LastOrDefault();
+            _rolls[_currentRoll++] = pins;
         }
 
         public int GetScore()
         {
-            return _frames.Take(10).Sum(x=>x.Score);
+            int score = 0;
+            int frameIndex = 0;
+            for (int frame = 0; frame < 10; frame++)
+            {
+                if (IsStrike(frameIndex))
+                {
+                    score += 10 + StrikeBonus(frameIndex);
+                    frameIndex++;
+                }
+                if (IsSpare(frameIndex))
+                {
+                    score += 10 + SpareBonus(frameIndex);
+                    frameIndex += 2;
+                }
+                else
+                {
+                    score += SumOfBallInFrame(frameIndex);
+                    frameIndex += 2;
+                }
+            }
+            return score;
         }
+
+        private int SumOfBallInFrame(int frameIndex) => _rolls[frameIndex] + _rolls[frameIndex + 1];
+
+        private int SpareBonus(int frameIndex) => _rolls[frameIndex + 2];
+
+        private int StrikeBonus(int frameIndex) => _rolls[frameIndex + 1] + _rolls[frameIndex + 2];
+
+        private bool IsStrike(int frameIndex) => _rolls[frameIndex] == 10;
+
+        private bool IsSpare(int frameIndex) => _rolls[frameIndex] + _rolls[frameIndex+1] == 10;
     }
 }

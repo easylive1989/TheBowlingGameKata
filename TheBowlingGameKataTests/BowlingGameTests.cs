@@ -1,90 +1,75 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TheBowlingGameKata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheBowlingGameKata.Tests
 {
     [TestClass()]
     public class BowlingGameTests
     {
-        [TestMethod()]
-        public void NoPinFall()
-        {
-            var bowlingGame = GetBowlingGame();
-            for (int i = 0; i < 10; i++)
-            {
-                bowlingGame.Roll(0);
-            }
-            Assert.AreEqual(0, bowlingGame.GetScore());
-        }
+        private BowlingGame _bowlingGame;
 
-        private BowlingGame GetBowlingGame()
+        [TestInitialize]
+        public void SetUp()
         {
-            return new BowlingGame();
+            _bowlingGame = new BowlingGame();
         }
 
         [TestMethod]
-        public void FourPinsEachRoll()
+        public void AllOne()
         {
-            var bowlingGame = GetBowlingGame();
-            for (int i = 0; i < 20; i++)
+            RollMany(20, 1);
+
+            Assert.AreEqual(20, _bowlingGame.GetScore());
+        }
+
+        private void RollMany(int n, int pins)
+        {
+            for (int i = 0; i < n; i++)
             {
-                bowlingGame.Roll(4);
+                _bowlingGame.Roll(pins);
             }
-            Assert.AreEqual(80, bowlingGame.GetScore());
         }
 
         [TestMethod]
-        public void FivePinsEachRoll()
+        public void AllZero()
         {
-            var bowlingGame = GetBowlingGame();
-            for (int i = 0; i < 21; i++)
-            {
-                bowlingGame.Roll(5);
-            }
-            Assert.AreEqual(150, bowlingGame.GetScore());
+            RollMany(20, 0);
+            Assert.AreEqual(0, _bowlingGame.GetScore());
         }
 
         [TestMethod]
-        public void TenPinsEachRoll()
+        public void OneSpare()
         {
-            var bowlingGame = GetBowlingGame();
-            for (int i = 0; i < 12; i++)
-            {
-                bowlingGame.Roll(10);
-            }
-            Assert.AreEqual(300, bowlingGame.GetScore());
+            RollSpare();
+            _bowlingGame.Roll(3);
+            RollMany(17, 0);
+            Assert.AreEqual(16, _bowlingGame.GetScore());
+        }
+
+        private void RollSpare()
+        {
+            _bowlingGame.Roll(5);
+            _bowlingGame.Roll(5);
+        }
+        [TestMethod]
+        public void OneStrike()
+        {
+            RollStrike();
+            _bowlingGame.Roll(3);
+            _bowlingGame.Roll(4);
+            RollMany(16, 0);
+            Assert.AreEqual(24, _bowlingGame.GetScore());
+        }
+
+        private void RollStrike()
+        {
+            _bowlingGame.Roll(10);
         }
 
         [TestMethod]
-        public void Complex()
+        public void AllStrike()
         {
-            var bowlingGame = GetBowlingGame();
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(10);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(5);
-            bowlingGame.Roll(5);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(5);
-            bowlingGame.Roll(5);
-            bowlingGame.Roll(10);
-            bowlingGame.Roll(1);
-            bowlingGame.Roll(9);
-            bowlingGame.Roll(5);
-
-            Assert.AreEqual(88, bowlingGame.GetScore());
+            RollMany(12, 10);
+            Assert.AreEqual(300, _bowlingGame.GetScore());
         }
     }
 }
